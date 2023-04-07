@@ -1,0 +1,39 @@
+# 技術課題
+
+## task1
+
+### 完了した機能
+
+- Makefileを用意してMySQLを起動し、`make run`でAPIサーバーが立ち上がります。
+  - Makefileで環境の準備
+    ```
+    $ make run-all # MySQL起動、ダミーデータを作成
+    $ make run     # API起動
+    ```
+  - 以下のクエリを使用してAPIとやり取りできます:
+    ```
+    $ curl -X POST -H "Content-Type: application/json" -d '{"userId": "1", "actionType": "ATTACK", "opponentMonsterId": "1", "myMonsterId": "1", "createdAt": 1258149600}' http://localhost:8080/event/attack
+    ```
+    ```
+    $ curl -X POST -H "Content-Type: application/json" -d '{"userId": "1", "actionType": "LEVEL_UP", "myMonsterId": "2", "amount": 2, "createdAt": 1258236000}' http://localhost:8080/event/level_up
+    ```
+
+### 未完成の項目
+
+- ストーリー要件を満たすプログラム
+
+## task2
+### 達成できたこと
+#### クリーンアーキテクチャで疎結合を目指している
+- 現在MySQLを使用していますが、他のデータベース（GCPのFirestore、Spanner）にも移行可能です。
+
+### 実装が間に合わなかったもの
+#### コンテナ化を行う
+- コンテナにすることで AWS/GCPなどのサービスで実行しやすくなる
+#### Go Mockを使ったテストの作成
+- Clean Architectureのため、Mockを使ったテストが実行しやすい
+#### DB insertをメッセージングに置き換える
+- すべてのDBにinsertする関数をPub/Subのメッセージングキューを利用し、APIでの処理とバックグラウンドでの処理を非同期に分割してスケーリングしやすくする
+- Clean Architectureのため、切り替え自体は比較的やりやすい
+#### loggingツールの設定
+- Zapやzerologなど高速で便利なロギングに切り替える
